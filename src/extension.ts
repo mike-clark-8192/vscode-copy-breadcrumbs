@@ -36,18 +36,20 @@ function getCommandFnForVSCodeRegistration(commandName: CommandNameType) {
     const config = vscode.workspace.getConfiguration(
       "cunneen-copy-breadcrumbs"
     );
-    const separationString = config.separationString ?? ".";
+    const pathPartSep = config.pathPartSep ?? "/";
+    const pathCrumbSep = config.pathCrumbSep ?? "#";
+    const crumbPartSep = config.crumbPartSep ?? ".";
 
     if (activeEditor) {
       const currentLine = activeEditor.selection.active.line;
-      const relative = getRelativeParts(activeEditor, separationString);
+      const relative = getRelativeParts(activeEditor, pathPartSep);
 
       getSymbols(activeEditor, currentLine).then((symbols) => {
         const typedSymbols = symbols as (
           | vscode.SymbolInformation
           | vscode.DocumentSymbol
         )[];
-        performActionWithBreadcrumbSymbols(config, typedSymbols, relative, commandName);
+        performActionWithBreadcrumbSymbols(config, typedSymbols, relative, commandName, pathCrumbSep, crumbPartSep);
       });
     } else {
       vscode.window.showErrorMessage("No active editor open.");
@@ -59,10 +61,10 @@ function getCommandFnForVSCodeRegistration(commandName: CommandNameType) {
 /**
  * Grabs the path of the active editor
  * @param activeEditor
- * @param breadcrumbSeparator - The string to use to separate breadcrumb components
+ * @param pathPartSep - The string to use to separate file path components
  * @returns The paths
  */
-function getRelativeParts(activeEditor: vscode.TextEditor, breadcrumbSeparator: string) {
+function getRelativeParts(activeEditor: vscode.TextEditor, pathPartSep: string) {
   const relative = vscode.workspace.asRelativePath(
     activeEditor.document.uri.path
   );
@@ -74,8 +76,8 @@ function getRelativeParts(activeEditor: vscode.TextEditor, breadcrumbSeparator: 
     parts.push(part);
   }
 
-  // Return the parts separated by a `.`
-  return parts.join(breadcrumbSeparator);
+  // Return the parts separated by the pathPartSep
+  return parts.join(pathPartSep);
 }
 
 /**
@@ -146,10 +148,11 @@ function performActionWithBreadcrumbSymbols(
   config: vscode.WorkspaceConfiguration,
   symbols: (vscode.SymbolInformation | vscode.DocumentSymbol)[],
   relative: string,
-  commandName: CommandNameType
+  commandName: CommandNameType,
+  pathCrumbSep: string,
+  crumbPartSep: string
 ) {
   let breadcrumbs: string;
-  const separationString = config.separationString ?? ".";
 
   if (symbols.length === 0) {
     breadcrumbs = relative;
@@ -160,8 +163,8 @@ function performActionWithBreadcrumbSymbols(
         break;
       case "cunneen-copy-breadcrumbs.copy":
       default:
-        breadcrumbs = `${relative}${separationString}${symbols.join(
-          separationString
+        breadcrumbs = `${relative}${pathCrumbSep}${symbols.join(
+          crumbPartSep
         )}`;
     }
   }

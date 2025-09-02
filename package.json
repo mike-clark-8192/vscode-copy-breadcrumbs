@@ -35,15 +35,16 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [{
-      "command": "cunneen-copy-breadcrumbs.copy",
-      "title": "Copy Breadcrumb"
-    },
-    {
-      "command": "cunneen-copy-breadcrumbs.copy-last",
-      "title": "Copy Breadcrumb - Last Part Only"
-    }
-  ],
+    "commands": [
+      {
+        "command": "cunneen-copy-breadcrumbs.copy",
+        "title": "Copy Breadcrumb"
+      },
+      {
+        "command": "cunneen-copy-breadcrumbs.copy-last",
+        "title": "Copy Breadcrumb - Last Part Only"
+      }
+    ],
     "configuration": {
       "title": "Breadcrumb Copier",
       "properties": {
@@ -62,22 +63,32 @@
           "default": true,
           "description": "Show a notification message with the clipboard contents."
         },
-        "cunneen-copy-breadcrumbs.separationString": {
+        "cunneen-copy-breadcrumbs.pathPartSep": {
           "type": "string",
-          "default": " > ",
-          "description": "String used to separate breadcrumb path components"
+          "default": "/",
+          "description": "Separator for file path parts (e.g., myproj/src/pkg)"
+        },
+        "cunneen-copy-breadcrumbs.pathCrumbSep": {
+          "type": "string",
+          "default": "#",
+          "description": "Separator between file path and symbol breadcrumbs (e.g., index.js#function)"
+        },
+        "cunneen-copy-breadcrumbs.crumbPartSep": {
+          "type": "string",
+          "default": ".",
+          "description": "Separator for symbol parts (e.g., class.method.innerFunction)"
         }
       }
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run package",
+    "vscode:prepublish": "pnpm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
     "pull-dotenv": "npx dotenv-vault@latest pull",
@@ -85,17 +96,18 @@
     "publish": "eval $(cat ./.env) && VSCE_PAT=$VSCE_PAT vsce publish"
   },
   "devDependencies": {
-    "@types/vscode": "^1.86.0",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "18.x",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "@typescript-eslint/parser": "^6.19.1",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
-    "ts-loader": "^9.5.1",
-    "webpack": "^5.90.0",
-    "webpack-cli": "^5.1.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "~18.19.123",
+    "@types/vscode": "^1.103.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.9"
-  }
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^8.57.1",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^5.1.4"
+  },
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
 }
