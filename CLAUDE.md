@@ -8,6 +8,8 @@ This is a VSCode extension that copies breadcrumbs from the editor to clipboard 
 
 ## Build and Development Commands
 
+Note: there may be some references to yarn in the project. We are no longer using yarn. Use pnpm instead.
+
 ```bash
 # Install dependencies
 pnpm install
