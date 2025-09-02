@@ -1,8 +1,8 @@
 {
-  "name": "cunneen-copy-breadcrumbs",
-  "displayName": "Breadcrumb Copier",
+  "name": "cunneen-copy-breadcrumbs-fork",
+  "displayName": "Breadcrumb Copier (Fork)",
   "description": "Copy the active editor's breadcrumbs path",
-  "publisher": "MikeCunneen",
+  "publisher": "local",
   "author": {
     "name": "Mike Cunneen",
     "url": "https://github.com/cunneen"
